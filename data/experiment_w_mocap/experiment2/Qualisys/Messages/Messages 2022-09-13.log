@@ -1,0 +1,61 @@
+1	13:15:24	Realtime started	
+1	13:29:29	Calibration started	
+1	13:29:34	Calibration finished after 4.9248 seconds	
+1	13:29:36	File created	
+1	13:29:36	File saved as D:\DennisChristie\Test_Amode_US\Calibrations\20220913_132827.qca	
+1	13:29:59	File closed	
+1	13:30:03	Realtime started	
+1	13:33:05	Calibration started	
+1	13:33:10	Calibration finished after 5.3250 seconds	
+1	13:33:12	File created	
+1	13:33:12	File saved as D:\DennisChristie\Test_Amode_US\Calibrations\20220913_133203.qca	
+1	13:33:19	File closed	
+1	13:33:24	Realtime started	
+1	14:11:57	Disconnected	
+1	14:11:58	Realtime started	
+1	14:14:30	File created	
+1	14:14:30	File saved as D:\DennisChristie\Test_Amode_US\Data\RB.qtm	
+1	14:15:34	File saved as D:\DennisChristie\Test_Amode_US\Data\RB.qtm	
+1	14:15:34	File closed	
+1	14:15:35	Realtime started	
+1	14:40:55	Recalibration recommended	Camera 3 has very few contributions to the 3D reconstruction.
+1	14:40:55	Not all gaps were filled	25 gaps out of 26 were filled. One gap was longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:40:55	Rigid body identification results	Rigid body identification results:  4 successful  0 failed
+1	14:40:55	Not all gaps were filled	No gaps were filled. The gaps were all longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:40:56	File created	
+1	14:40:56	File saved as D:\DennisChristie\Test_Amode_US\Data\test1.qtm	
+1	14:41:07	File closed	
+1	14:41:08	Realtime started	
+1	14:42:26	Not all gaps were filled	29 gaps out of 31 were filled. The other 2 gaps were longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:42:26	Rigid body identification results	Rigid body identification results:  4 successful  0 failed
+1	14:42:26	Not all gaps were filled	No gaps were filled. The gaps were all longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:42:27	File created	
+1	14:42:27	File saved as D:\DennisChristie\Test_Amode_US\Data\test1.qtm	
+1	14:42:39	File closed	
+1	14:42:40	Realtime started	
+1	14:43:51	Not all gaps were filled	40 gaps out of 42 were filled. The other 2 gaps were longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:43:51	Rigid body identification results	Rigid body identification results:  4 successful  0 failed
+1	14:43:51	Not all gaps were filled	No gaps were filled. The gaps were all longer than 10 frames (max gap length).  Adjust maximum gap length in trajectories settings in project options or in reprocessing trajectories settings.
+1	14:43:52	File created	
+1	14:43:53	File saved as D:\DennisChristie\Test_Amode_US\Data\test2.qtm	
+1	15:59:18	File closed	
+1	17:42:06	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test1.qtm	
+1	17:43:41	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test1_gapfilled.qtm	
+1	17:49:12	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test1_smoothed.qtm	
+1	17:49:23	File closed	
+1	17:49:23	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2.qtm	
+1	17:58:24	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2_gapfilled.qtm	
+1	17:58:42	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2_smoothed.qtm	
+1	18:01:29	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2_smoothed.qtm	
+1	18:07:19	File saved as D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2_smoothed.qtm	
+1	18:10:15	File closed	
+1	18:10:30	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test1_smoothed.qtm	
+1	18:10:51	File closed	
+1	18:11:07	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test2_smoothed.qtm	
+1	18:11:31	File closed	
+1	18:11:46	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\Test_Amode_US\Data\test1.qtm	
+1	18:12:27	File closed	
+1	18:14:00	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\QualysisData1\Data\test1.qtm	
+1	18:14:03	File closed	
+1	18:14:15	File loaded from D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\QualysisData1\Data\test1_smoothed.qtm	
+1	18:14:16	File closed	

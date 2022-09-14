@@ -1,0 +1,3 @@
+EXPERIMENT DESCRIPTION:
+This exeriment is conducted to test the integration between A-mode, B-mode,
+and Qualisys for the first time. It is performed before Qualifier meeting.

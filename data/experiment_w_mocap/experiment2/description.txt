@@ -1,0 +1,4 @@
+EXPERIMENT DESCRIPTION:
+This exeriment is conducted to test again the overall system. We call it a 
+Usability Testing, because Nico require us to do that. This was the
+experiment with Guillaume and Kenan.
