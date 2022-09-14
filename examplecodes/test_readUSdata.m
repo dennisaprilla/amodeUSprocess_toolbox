@@ -23,7 +23,7 @@ indexes = [];
 
 % specify where is the folder
 % filenames = dir('D:\Documents\BELANDA\PhD Thesis\Code\MATLAB\Test_qualisys\data\experiment1\Amode\testAmode2\*.tiff');
-filenames = dir('D:\test\log11\*.tiff');
+filenames = dir('D:\Documents\BELANDA\PhD Thesis\Data\USexperiment\UsabilityTesting1\AmodeUS\test1\*.tiff');
 
 % specify the configuration of the ultrasound machine
 number_probes = 30;
@@ -68,16 +68,18 @@ figure(1);
 for i=1:size(all_ultrasoundfrd,3)
     
     plot_number=1;
-    for probe=16:18
-        subplot(3,2,plot_number);
+    for probe=29:30
+        subplot(2,1,plot_number);
         plot(all_ultrasoundfrd(probe,1:end, i));
-        ylim([-2000 2000]);
+        ylim([-5000 5000]);
         title(sprintf("Probe #%d", probe));
         
-        plot_number=plot_number+2;
-        if(plot_number>6) 
-            plot_number=2; 
-        end
+%         plot_number=plot_number+2;
+%         if(plot_number>6) 
+%             plot_number=2; 
+%         end
+        plot_number=plot_number+1;
+
     end
     
     disp(i);
