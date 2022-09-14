@@ -1,7 +1,7 @@
 PathFileType	4	(X/Y/Z)	marker.trc
 DataRate	CameraRate	NumFrames	NumMarkers	Units	OrigDataRate	OrigDataStartFrame	OrigNumFrames
 128	128	2567	6	m	128	1	2567
-Frame#	Time	US1-1	US1-2	US1-3	US2-1	US2-2	US2-3	
+Frame#	Time	US29-1	US29-2	US29-3	US30-1	US30-2	US30-3	
 		X1	Y1	Z1	X2	Y2	Z2	X3	Y3	Z3	X4	Y4	Z4	X5	Y5	Z5	X6	Y6	Z6	
 
 0	1663072924.87518	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	-nan	
