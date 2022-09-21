@@ -214,7 +214,7 @@ windowRange_i = floor(windowRange / us_spec.index2distance_constant + 1);
 [allpeaks, ~] = peaks_USsignal_windowed(USData, data_spec, us_spec, windowRange, windowRange_i);
 
 % clear unneccesary variable
-clear file_ustconfig path_ustconfig probeProperties x_mm probeProperties windowRange windowRange_i ust_struct ust_struct_fieldnames
+clear file_ustconfig path_ustconfig probeProperties x_mm probeProperties windowRange windowRange_i ust_struct ust_struct_fieldnames lowerbound_str upperbound_str group_str
 
 % load('allpeaks_ustconfig_exp2.mat');
 
@@ -251,27 +251,27 @@ T_global_markerstick = repmat(eye(4),  1, 1, data_spec.n_ust, data_spec.n_frames
 % (!) different number of transducers
 start_ust = 29;
 
-for frame = 1:data_spec.n_frames
+for current_frame = 1:data_spec.n_frames
      
     % in previous implementation, we are grouping several transducers into one
     % holder, so several trasnducers shares same transformation #2. but now,
     % because each transducer has individual T, it means that the number of 
     % transducer is the same as the number of T.
-    for markerstick = start_ust:data_spec.n_ust
+    for current_markerstick = start_ust:data_spec.n_ust
         
         % (!) WARNING:
         % (!) This line of code below is here because the previous warning,
         % (!) i only use 2 transducers. So i need to adjust the indexing so
         % (!) i can store holder_t_global and holder_R_global properly.
         % (!) YOU SHOULD CHANGE if you use different number of transducers
-        adjusted_idx = (markerstick - start_ust) + 1;
+        adjusted_idx = (current_markerstick - start_ust) + 1;
         
         % obtain transfomation data
-        t = holder_t_global(adjusted_idx, :, frame)';
-        R = reshape(holder_R_global(adjusted_idx, :, frame), 3,3);
+        t = holder_t_global(adjusted_idx, :, current_frame)';
+        R = reshape(holder_R_global(adjusted_idx, :, current_frame), 3,3);
         % rearrange holder_t_global and holder_R_global to homogeneous
         % transformation matrix [R, t; 0 1]
-        T_global_markerstick(:, :, markerstick, frame) = [ R, t; zeros(1,3), 1];
+        T_global_markerstick(:, :, current_markerstick, current_frame) = [ R, t; zeros(1,3), 1];
     end
 end
 
@@ -291,7 +291,7 @@ for current_ust=1:data_spec.n_ust
 end
 
 % clear unneccesary variable
-clear fname path calibration_markerstick start_ust adjusted_idx holder_t_global holder_R_global frame holder R t i
+clear fname path calibration_markerstick start_ust current_markerstick adjusted_idx holder_t_global holder_R_global frame holder R t i
 
 %% 3.2) Recovering 3D Trajectory of Ultrasound Data
 % Now, everything is ready. We reformatted the structure of our
@@ -310,30 +310,30 @@ pc_amode = zeros(data_spec.n_ust, 3, data_spec.n_frames);
 % tip, this is just for display only
 pc_usttip = zeros(data_spec.n_ust, 3, data_spec.n_frames);
 
-for frame = 1:data_spec.n_frames
-    for ust = start_ust:data_spec.n_ust
+for current_frame = 1:data_spec.n_frames
+    for current_ust = start_ust:data_spec.n_ust
         
         % two steps of transformation
-        amode = T_global_markerstick(:,:, ust, frame) * ...
-                T_markerstick_usttip(:,:, ust) * ...
-                [0, 0, allpeaks.locations(ust, frame), 1]';   
+        amode = T_global_markerstick(:,:, current_ust, current_frame) * ...
+                T_markerstick_usttip(:,:, current_ust) * ...
+                [0, 0, allpeaks.locations(current_ust, current_frame), 1]';   
 
         % (//) uncomment this to follow qualisys base vector
         basevector_Rcorrection = eul2rotm([0 0 deg2rad(90)]);
         amode = [basevector_Rcorrection, zeros(3,1); zeros(1,3), 1] * amode;
         
         % from homogeneous back to cartesian
-        pc_amode(ust, :, frame) = amode(1:3)';
+        pc_amode(current_ust, :, current_frame) = amode(1:3)';
         
         % (//) uncomment this part if you dont want to have point cloud for 
         % ust tip, this is just for display only
-        usttip = T_global_markerstick(:,:, ust, frame) * ...
-                 T_markerstick_usttip(:,:, ust) * ...
+        usttip = T_global_markerstick(:,:, current_ust, current_frame) * ...
+                 T_markerstick_usttip(:,:, current_ust) * ...
                  [0, 0, 0, 1]';
         usttip = [basevector_Rcorrection, zeros(3,1); zeros(1,3), 1] * usttip;
         
         % from homogeneous back to cartesian
-        pc_usttip(ust, :, frame) = usttip(1:3)';
+        pc_usttip(current_ust, :, current_frame) = usttip(1:3)';
         
     end
     
@@ -357,7 +357,6 @@ axes2 = subplot(2,2,4, 'Parent', figure1);
 hold(axes1, 'on');
 display_basevector(axes1, [0 0 0], [1 0 0; 0 1 0; 0 0 1], 50, 'plot_basevector');
 
-
 % some addition configuration for the plot
 grid(axes1, 'on'); 
 axis(axes1, 'equal');
@@ -365,39 +364,39 @@ xlabel(axes1, 'X (cm)');
 ylabel(axes1, 'Y (cm)');
 zlabel(axes1, 'Z (cm)');
 xlim(axes1, [-300, 300]);
-ylim(axes1, [-250, 0]);
+ylim(axes1, [-250, 50]);
 zlim(axes1, [0, 450]);
 view(axes1, 50,30);
 offset_ustext = 5;
 
-for frame = 1:data_spec.n_frames
+for current_frame = 1:data_spec.n_frames
     
     % plot the amode
     delete(findobj('Tag', 'plot_amode'));
-    plot3(axes1, pc_amode(start_ust:end, 1, frame), pc_amode(start_ust:end, 2, frame), pc_amode(start_ust:end, 3, frame), ...
+    plot3(axes1, pc_amode(start_ust:end, 1, current_frame), pc_amode(start_ust:end, 2, current_frame), pc_amode(start_ust:end, 3, current_frame), ...
           '.r', 'MarkerFaceColor', 'red', 'Tag', 'plot_amode');
 	% plot the US-tip
     delete(findobj('Tag', 'plot_usttip'));
-    plot3(axes1, pc_usttip(start_ust:end, 1, frame), pc_usttip(start_ust:end, 2, frame), pc_usttip(start_ust:end, 3, frame), ...
+    plot3(axes1, pc_usttip(start_ust:end, 1, current_frame), pc_usttip(start_ust:end, 2, current_frame), pc_usttip(start_ust:end, 3, current_frame), ...
           'ob', 'MarkerFaceColor', 'blue', 'Tag', 'plot_usttip');
     
     % plot the text for indicator
     delete(findobj('Tag', 'plot_ustext'));
     for current_ust=start_ust:data_spec.n_ust
         text( axes1, ...
-              pc_usttip(current_ust, 1, frame)+offset_ustext, ...
-              pc_usttip(current_ust, 2, frame)+offset_ustext, ...
-              pc_usttip(current_ust, 3, frame)+offset_ustext, ...
+              pc_usttip(current_ust, 1, current_frame)+offset_ustext, ...
+              pc_usttip(current_ust, 2, current_frame)+offset_ustext, ...
+              pc_usttip(current_ust, 3, current_frame)+offset_ustext, ...
               sprintf('US%2d', current_ust), ...
               'Tag', 'plot_ustext');
     end
     
     % write the title with frame number
-    title(axes1, sprintf('Reconstructed A-mode, Frame %d', frame));
+    title(axes1, sprintf('Reconstructed A-mode, Frame %d', current_frame));
     
     % bar plot for depth
     delete(findobj('Tag', 'bar_depth'));
-    bar(axes2, (start_ust:30), allpeaks.locations(start_ust:end, frame), 'Tag', 'bar_depth', 'FaceColor', 'blue');
+    bar(axes2, (start_ust:30), allpeaks.locations(start_ust:end, current_frame), 'Tag', 'bar_depth', 'FaceColor', 'blue');
     grid(axes2, 'on');
     xlabel(axes2, 'Ultrasound Transducer #');
     ylabel(axes2, 'Depth (mm)');
@@ -407,7 +406,7 @@ for frame = 1:data_spec.n_frames
     drawnow;
 end
 
-
+clear current_frame current_ust offset_ustext start_ust
 
 
 
