@@ -1,7 +1,8 @@
 function display_mmode_windowed(current_axes, probeNumber_toShow, envelope_data, data_spec, x_axis_values)
 
 % set the constant
-mmode_threshold = 1000;
+mmode_threshold = 15000;
+compression_factor = 1;
 
 if (iscell(envelope_data))
     
@@ -17,13 +18,16 @@ else
 end
 
 probe_image = uint8(255 * mat2gray(probe, [0 mmode_threshold]));
+% probe_image = uint8(255 * mat2gray(probe));
+% log_compression = 10 * log10( (compression_factor * probe) + eps);
+% probe_image = uint8(255 * mat2gray(log_compression));
 
 % show m-mode
 imagesc(current_axes, [1 data_spec.n_frames], [x_axis_values(1) x_axis_values(end)], probe_image);
 xlabel(current_axes, 'Timestamp');
 ylabel(current_axes, 'Depth (mm)');
 title(current_axes, sprintf("M-Mode Probe #%d", probeNumber_toShow));
-colorbar(current_axes);
+% colorbar(current_axes);
 
 end
 

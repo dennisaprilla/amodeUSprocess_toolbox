@@ -9,7 +9,9 @@ yyaxis(current_axes, 'left');
 plot(current_axes, x_axis_values, raw_data(probeNumber_toShow, :, timestamp_toShow), '-', 'Color', 'g', 'Tag', tag1);
 xlabel(current_axes, 'Distance (mm)');
 ylabel(current_axes, 'Signal Amplitude');
-ylim(current_axes, [-5000, 5000]);
+y_limit = [min(raw_data(probeNumber_toShow, :, timestamp_toShow)), ...
+           max(raw_data(probeNumber_toShow, :, timestamp_toShow) )];
+ylim(current_axes, y_limit);
 
 % Check whether the envelop variable is a cell or not. Why cell? because if
 % we clipped the envelop signal based on the window, the length of the
@@ -24,10 +26,11 @@ end
 
 % show the envelope
 yyaxis(current_axes, 'right');
-plot(current_axes, x_axis_values, envelop_data_toShow, '-', 'Color', 'r', 'Tag', tag2);     
+plot(current_axes, x_axis_values, envelop_data_toShow, '-', 'Color', 'r', 'LineWidth',1.5, 'Tag', tag2);     
 xlabel(current_axes, 'Distance (mm)');
 ylabel(current_axes, 'Envelop Amplitude');
-ylim(current_axes, [0, 1500]);
+% ylim(current_axes, [0, 1500]);
+ylim(current_axes, y_limit);
 title(current_axes, sprintf("A-Mode Probe #%d", probeNumber_toShow));
 
 grid(current_axes, 'on');
