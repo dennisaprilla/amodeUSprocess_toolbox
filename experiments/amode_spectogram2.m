@@ -45,7 +45,7 @@ bpFilt = designfilt('bandpassiir', 'FilterOrder', 20, ...
          'SampleRate', Fs);
      
 % barkers code
-path_barkerscode = 'data';
+path_barkerscode = '../data';
 text_barkerscode = 'kenans_barkercode.txt';
 fullpath_barkerscode = strcat(path_barkerscode, filesep, text_barkerscode);
 barkerscode = readmatrix(fullpath_barkerscode);
@@ -58,8 +58,8 @@ figure1 = figure('Name', 'Wavelet Analysis');
 figure1.WindowState = 'maximized';
 
 % data interest
-probe_to_show = 18;
-frames_to_show = 165:220;
+probe_to_show = 29;
+frames_to_show = 101;
 
 % flag for recording the plot
 recordplot = false;
@@ -101,7 +101,7 @@ for frame_to_show=frames_to_show
     S_final = S_barker;
 
     % continous wavelet transform
-    [cfs, frq] = cwt(S_final, Fs, 'bump', 'VoicesPerOctave', 32);
+    [cfs, frq] = cwt(S_final, Fs, 'bump', 'VoicesPerOctave', 32, 'FrequencyLimits', [Fs/16 Fs/4]);
     subplotcol_cwt = 2;
 
     % discrete wavelet transform
@@ -166,6 +166,7 @@ for frame_to_show=frames_to_show
     
     
     % plot raw against normal envelope ------------------------------------
+    %{
     axes = subplot(subplotrow, subplotcol, subplotidx_env(:), 'Parent', figure1);
     yyaxis(axes, 'left');
     plot(axes, d_vector, S_barker, '-g'); hold(axes, 'on');
@@ -174,6 +175,7 @@ for frame_to_show=frames_to_show
     axis(axes, 'tight');
     grid(axes, 'on');
     title('Processed Signal against Envelope', 'Interpreter', 'latex');
+    %}
     % ---------------------------------------------------------------------
     
     
@@ -202,7 +204,7 @@ for frame_to_show=frames_to_show
     shading(axes, 'flat');
     axis(axes, 'tight');
     grid(axes, 'on');
-    view(axes, [-0.1 80]);
+    view(axes, [0 90]);
     titlestr = strcat('CWT, Probe:\,', num2str(probe_to_show), ', Frame:\,', num2str(frame_to_show));
     title(axes, titlestr, 'Interpreter', 'latex');
     ylabel(axes, "MHz (Log scale)", 'Interpreter', 'latex');

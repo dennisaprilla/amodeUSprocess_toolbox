@@ -11,10 +11,10 @@ function [peak_bayes, peak_dists] = dwt_bayesian_peak(mra, mra_sel, isWeighted, 
     % constant for envelope and smoothing
     start = 5;
     step  = 3;
-    peak_alg = 'rms';
+    peak_alg = 'analytic';
     envconstants = start + (0:step:(mra_level-1)*step);
-    start = 5;
-    step  = 5;
+    start = 3;
+    step  = 3;
     gausswindows =  start + (0:step:(mra_level-1)*step);
     
     % constant for find peaks
@@ -66,7 +66,7 @@ function [peak_bayes, peak_dists] = dwt_bayesian_peak(mra, mra_sel, isWeighted, 
                 end
             else
                 mu_peak = loc_mm;
-                sigma_peak = 1; % in mm unit
+                sigma_peak = 0.8; % in mm unit
             end
             
             % if there is no peak, no need to store the values

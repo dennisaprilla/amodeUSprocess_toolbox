@@ -118,7 +118,7 @@ dname = uigetdir(pwd);
 set(handles.edit_path, 'String', dname);
 
 % read data
-[data, timestamps, indexes] = readTIFF_USsignal(dname, 30, 2500);
+[data, timestamps, indexes] = readTIFF_USsignal(dname, 30, 1500);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

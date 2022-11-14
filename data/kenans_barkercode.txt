@@ -1,4 +1,4 @@
-Time - Plot 0	Amplitude - Plot 0	
+Time	Amplitude	
 0	0	
 2E-8	0.802123	
 4E-8	0.95799	

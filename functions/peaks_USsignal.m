@@ -1,4 +1,4 @@
-function [allpeaks, USsignals_lpfilter] = peaks_USsignal(data, data_spec, us_spec)
+function [allpeaks, USsignals_corrbarker] = peaks_USsignal(data, data_spec, us_spec)
 
 % preparing constants for peak detection
 minpeakwidth = 5;

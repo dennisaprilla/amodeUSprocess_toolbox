@@ -76,15 +76,15 @@ sample_end   = n_samples*2 - floor( 0.5 * length(barkerscode(:, 2)) );
 
 % discrete wavelet transform
 mra_level = 5;
-mra_sel   = [2, 3, 4, 5];
+mra_sel   = [2, 3, 4];
 
 % constant for envelope and smoothing
-start = 3;
-step  = 3;
+start = 10;
+step  = 5;
 peak_alg = 'analytic';
 envconstants = start + (0:step:(mra_level-1)*step);
-start = 1;
-step  = 1;
+start = 3;
+step  = 3;
 gausswindows =  start + (0:step:(mra_level-1)*step);
     
 % Figure Preparation ------------------------------------------------------
@@ -100,38 +100,52 @@ subplot_index = reshape(1:(subplot_rows*subplot_cols), subplot_cols, subplot_row
 subplotidx_dwt = subplot_index(:,1)';
 subplotidx_mmode = subplot_index(1:3,2);
 subplotidx_amode = subplot_index(5,2);
+subplotidx_gausswindow = subplot_index(6,2);
 
 % axes for dwt signal
 ax_dwt = {};
+freq_list = ( 0.5*Fs ./ [1 2 4 6 8 16]) .* 1e-6; % in MHz
 for mra_idx = 1:mra_level
     ax_dwt{mra_idx} = subplot(subplot_rows, subplot_cols, subplotidx_dwt(mra_idx), 'Parent', figure1);
-    titlestr = strcat('$\tilde{D}$', num2str(mra_idx));
+    titlestr = strcat('$\tilde{D}$', num2str(mra_idx), ' (',  num2str(freq_list(mra_idx+1)), '-',  num2str(freq_list(mra_idx)) ,' MHz)');
     title(ax_dwt{mra_idx}, titlestr, 'Interpreter', 'latex');
     axis(ax_dwt{mra_idx}, 'tight');
+    ax_dwt{mra_idx}.XGrid = 'on';
     hold(ax_dwt{mra_idx}, 'on');
 end
 ax_dwt{mra_idx+1} = subplot(subplot_rows, subplot_cols, subplotidx_dwt(end), 'Parent', figure1);
 title(ax_dwt{mra_idx+1}, 'Low Frequency Component', 'Interpreter', 'latex');
 axis(ax_dwt{mra_idx+1}, 'tight');
-xlabel(ax_dwt{mra_idx+1}, 'Distance (mm)', 'Interpreter', 'latex')
+xlabel(ax_dwt{mra_idx+1}, 'Distance (mm)', 'Interpreter', 'latex');
+ax_dwt{mra_idx+1}.XGrid = 'on';
 hold(ax_dwt{mra_idx+1}, 'on');
 
 % axes for mmode
 ax_mmode = subplot(subplot_rows, subplot_cols, subplotidx_mmode, 'Parent', figure1);
 title(ax_mmode, 'M-mode image', 'Interpreter', 'latex');
 axis(ax_mmode, 'tight');
+ax_mmode.XGrid = 'on';
 hold(ax_mmode, 'on');
 
 % axes for ammode
 ax_amode = subplot(subplot_rows, subplot_cols, subplotidx_amode, 'Parent', figure1);
-title(ax_amode, 'A-mode against ...', 'Interpreter', 'latex');
+title(ax_amode, 'Adaptive Gaussian Windowing with Bayesian Inference', 'Interpreter', 'latex');
 axis(ax_amode, 'tight');
+ax_amode.XGrid = 'on';
 hold(ax_amode, 'on');
+
+% axes for window
+ax_gausswindow = subplot(subplot_rows, subplot_cols, subplotidx_gausswindow, 'Parent', figure1);
+axis(ax_gausswindow, 'tight');
+xlabel(ax_gausswindow, 'Distance (mm)', 'Interpreter', 'latex');
+ax_gausswindow.XGrid = 'on';
+hold(ax_gausswindow, 'on');
 
 % Start loop --------------------------------------------------------------
 
 % flag for recording the plot
 recordplot = false;
+
 % data interest
 probe_to_show  = 18;
 frames_to_show = 50:350;
@@ -163,7 +177,7 @@ for current_frame=frames_to_show
 
     % discrete wavelet transform
     % fk8, coif1, sym4, db5
-    mra = modwtmra( modwt(S_barker, 'db2', mra_level) );
+    mra = modwtmra( modwt(S_barker, 'db5', mra_level) );
     
     % a variable to capture peak distribution in each mra level
     peak_dists = [];
@@ -193,10 +207,10 @@ for current_frame=frames_to_show
             plot(current_axes, d_vector, current_mra_env, '-r','Tag', 'plot_dwt');
             
             % find peaks
-            [~, loc] =  findpeaks( current_mra_norm, ...
-                                   'NPeaks', 3, ...
-                                   'MinPeakProminence', 0.7, ...
-                                   'SortStr', 'descend');
+            [~, loc, w, p] =  findpeaks( current_mra_norm, ...
+                                           'NPeaks', 10, ...
+                                           'MinPeakProminence', 0.3, ...
+                                           'SortStr', 'descend');
             loc_mm   = loc*index2distance_constant;
             for i=1:length(loc_mm)
                 xline(current_axes, loc_mm(i), '-b', 'LineWidth', 2, 'Tag', 'plot_dwt');
@@ -205,15 +219,31 @@ for current_frame=frames_to_show
             % fit the peaks to gaussian
             if(length(loc_mm)>1)
                 if(true)
-                    w_factor = [1 2 3 4 5];
-                    w_sel    = flip(w_factor(1:length(loc_mm)));
-                    new_loc_mm = [];
-                    for i=1:length(w_sel)
-                        for j=1:w_sel(i)
-                            new_loc_mm = [new_loc_mm, loc_mm(i)];
+                    
+                    if(false)
+                        w_factor = [1 2 3 4 5];
+                        w_sel    = flip(w_factor(1:length(loc_mm)));
+                        new_loc_mm = [];
+                        for i=1:length(w_sel)
+                            for j=1:w_sel(i)
+                                new_loc_mm = [new_loc_mm, loc_mm(i)];
+                            end
                         end
+                        [mu_peak, sigma_peak] = normfit(new_loc_mm);
+                        
+                    else
+                        w_norm = w ./ max(w);
+                        % w_factor = floor( 100* current_mra_norm(loc) .* (1 ./ w_norm));
+                        w_factor = floor( current_mra_norm(loc) .* w);
+                        new_loc_mm = [];
+                        for i=1:length(w_factor)
+                            for j=1:w_factor(i)
+                                new_loc_mm = [new_loc_mm, loc_mm(i)];
+                            end
+                        end
+                        [mu_peak, sigma_peak] = normfit(new_loc_mm);
                     end
-                    [mu_peak, sigma_peak] = normfit(new_loc_mm);
+                    
                 else
                     [mu_peak, sigma_peak] = normfit(loc_mm);
                 end
@@ -242,7 +272,7 @@ for current_frame=frames_to_show
     display_timestamp_mmode(ax_mmode, current_frame);
     drawnow;
     
-% Displaying something else -----------------------------------------------
+% Displaying Bayesian Inference -------------------------------------------
 
     delete(findobj('Tag', 'plot_amode'));
     yyaxis(ax_amode, 'left');
@@ -257,7 +287,15 @@ for current_frame=frames_to_show
     end
 
     yyaxis(ax_amode, 'right');
-    plot(ax_amode, d_vector, normpdf(d_vector, postMean, postSD), '-c', 'Tag', 'plot_amode');
+    peak_bayesian = normpdf(d_vector, postMean, postSD);
+    plot(ax_amode, d_vector, peak_bayesian, '-c', 'Tag', 'plot_amode');
+    
+% Displaying Gauss Window (?) ---------------------------------------------
+
+    delete(findobj('Tag', 'plot_gausswindow'));
+    plot(ax_gausswindow, d_vector, S_barker .* peak_bayesian, '-g', 'Tag', 'plot_gausswindow');
+    titlestr = strcat('Final Result (Frame \#', num2str(current_frame), ')');
+    title(ax_gausswindow, titlestr, 'Interpreter', 'latex');
     
     
 	% if user specify recordplot then grab the frame and write it to the

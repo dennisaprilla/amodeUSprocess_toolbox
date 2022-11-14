@@ -8,7 +8,7 @@ addpath(genpath('../functions/external'));
 
 % get us data
 dname = uigetdir(pwd);
-[USData, ~, ~] = readTIFF_USsignal(dname, 30, 2500);
+[USData, ~, ~] = readTIFF_USsignal(dname, 30, 1500);
 
 %% Preparing variables and constants
 
@@ -53,7 +53,7 @@ sample_end   = n_samples*2 - floor( 0.5 * length(barkerscode(:, 2)) );
 
 % discrete wavelet transform
 mra_level = 5;
-mra_sel   = [2, 3, 4, 5];
+mra_sel   = [2, 3, 4];
 
 % constant for envelope and smoothing
 start = 10;
@@ -88,7 +88,7 @@ R_k = x_stdRk_init^2;         % variance for measurement noise (we dont need
 recordplot = false;
 
 % data interest
-probe_to_show  = 24;
+probe_to_show  = 16;
 frames_to_show = 1:n_frames;
 
 % variable to store peak locations;
@@ -144,7 +144,7 @@ for current_frame=frames_to_show
 % Wavelet -----------------------------------------------------------------
 
     % discrete wavelet transform
-    mra = modwtmra( modwt(S_barker, 'fk8', mra_level) );
+    mra = modwtmra( modwt(S_barker, 'db5', mra_level) );
     
     [peak_bayes, peak_dists] = dwt_bayesian_peak(mra, mra_sel, true, index2distance_constant);
     peak_mean = peak_bayes(1);
